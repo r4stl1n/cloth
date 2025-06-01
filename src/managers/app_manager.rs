@@ -9,7 +9,7 @@ pub struct AppManager {
     config: Config,
     patterns: HashMap<String, String>,
     patterns_dir: String,
-    
+
     owui_client: OpenWebUIService,
 }
 
@@ -90,7 +90,6 @@ impl AppManager {
         pattern_name: &str,
         query: Option<String>,
     ) -> Result<String> {
-
         // Attempt to load the pattern
         let pattern_data = self.read_pattern(pattern_name)?;
 
@@ -102,6 +101,24 @@ impl AppManager {
         let completion = self
             .owui_client
             .completion(&model, format!("{}\n{}", pattern_data, input).as_str())?;
+
+        Ok(completion)
+    }
+
+    pub fn process_raw(
+        &mut self,
+        model_name: Option<String>,
+        prompt: &str,
+        query: Option<String>,
+    ) -> Result<String> {
+        // Get the input for the query
+        let input = get_input_or_stdin(query.to_owned());
+
+        let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
+        
+        let completion = self
+            .owui_client
+            .completion(&model, format!("{}\n{}", prompt, input).as_str())?;
 
         Ok(completion)
     }

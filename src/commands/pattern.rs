@@ -28,6 +28,21 @@ pub enum PatternCommands {
         #[clap(long)]
         query: Option<String>,
     },
+
+    // Process a pattern
+    Raw {
+        /// Name of the model
+        #[clap(long)]
+        model: Option<String>,
+
+        /// Prompt
+        #[clap(long)]
+        prompt: String,
+
+        /// Query to process
+        #[clap(long)]
+        query: Option<String>,
+    },
 }
 
 pub fn execute(pattern_directory: Option<String>, args: &PatternCommands) {
@@ -48,6 +63,17 @@ pub fn execute(pattern_directory: Option<String>, args: &PatternCommands) {
 
         PatternCommands::Process { model, name, query } => {
             match app_manager.process_pattern(model.clone(), name, query.clone()) {
+                Ok(data) => {
+                    println!("{}", data)
+                }
+                Err(e) => {
+                    tracing::error!("failed to run pattern: {}", e)
+                }
+            }
+        }
+
+        PatternCommands::Raw { model, prompt, query } => {
+            match app_manager.process_raw(model.clone(), prompt, query.clone()) {
                 Ok(data) => {
                     println!("{}", data)
                 }

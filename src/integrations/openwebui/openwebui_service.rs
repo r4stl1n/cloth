@@ -81,11 +81,11 @@ impl OpenWebUIService {
         )?;
 
         let response = recv_body.body_mut().read_json::<ChatCompletionResponse>()?;
-        
+
         if response.choices.len() == 0 {
             return Err(eyre!("no results returned from api"));
         };
-        
+
         Ok(response.choices[0].message.content.clone())
     }
 }

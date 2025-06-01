@@ -1,7 +1,7 @@
-use std::fs;
-use std::collections::HashMap;
-use eyre::Result;
 use crate::utils::text_extraction::get_input_or_stdin;
+use eyre::Result;
+use std::collections::HashMap;
+use std::fs;
 
 pub struct AppManager {
     patterns: HashMap<String, String>,
@@ -41,7 +41,7 @@ impl AppManager {
 
         Ok(())
     }
-    
+
     fn read_pattern(&mut self, pattern_name: &str) -> Result<String> {
         if let Some(pattern_path) = self.patterns.get(pattern_name) {
             let content = fs::read_to_string(format!("{}/pattern.md", pattern_path))?;
@@ -50,13 +50,13 @@ impl AppManager {
             Err(eyre::eyre!("pattern '{}' not found", pattern_name))
         }
     }
-    
-    pub fn list_patterns(&mut self)  {
+
+    pub fn list_patterns(&mut self) {
         for (pattern_name, pattern_path) in &self.patterns {
             tracing::info!("pattern: {} -> {}", pattern_name, pattern_path);
         }
     }
-    
+
     pub fn view_pattern(&mut self, pattern_name: &str) {
         match self.read_pattern(pattern_name) {
             Ok(content) => {
@@ -65,11 +65,8 @@ impl AppManager {
             Err(e) => tracing::error!("Failed to read pattern: {}", e),
         }
     }
-    
+
     pub fn process_pattern(&mut self, pattern_name: &str, query: Option<String>) {
-
         let input = get_input_or_stdin(query.to_owned());
-
-
     }
 }

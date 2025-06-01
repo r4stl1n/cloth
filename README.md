@@ -27,13 +27,11 @@ Cloth CLI provides a streamlined way to interact with Large Language Models usin
 git clone https://github.com/r4stl1n/cloth
 cd cloth
 cargo build --release
+##The compiled binary will be available at `target/release/cloth`.
 ```
-```
-The compiled binary will be available at `target/release/cloth`.
-### Add to PATH (Optional)
+To install do the following
 ``` bash
-# Copy to a directory in your PATH
-cp target/release/cloth /usr/local/bin/
+cargo install --path ./
 ```
 ## Quick Start
 1. **Setup Configuration**

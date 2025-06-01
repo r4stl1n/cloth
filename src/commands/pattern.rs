@@ -4,17 +4,17 @@ use std::process::exit;
 
 #[derive(Subcommand, Debug)]
 pub enum PatternCommands {
-    // List all supported patterns
+    /// List all patterns
     List {},
 
-    // View a specific pattern
+    /// View a specific pattern
     View {
         /// Name of the pattern
         #[clap(long)]
         pattern: String,
     },
 
-    // Process a pattern
+    /// Process a pattern
     Process {
         /// Name of the model
         #[clap(long)]
@@ -29,7 +29,7 @@ pub enum PatternCommands {
         query: Option<String>,
     },
 
-    // Process a pattern
+    /// Process a raw query
     Raw {
         /// Name of the model
         #[clap(long)]

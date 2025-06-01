@@ -5,10 +5,10 @@ use clap::Subcommand;
 
 #[derive(Subcommand, Debug)]
 pub enum OpenWebUiCommands {
-    // List all supported patterns
+    /// List all installed models
     ListModels {},
 
-    // View a specific pattern
+    /// Process a completion
     Completion {
         /// Name of the model
         #[clap(long)]

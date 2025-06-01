@@ -16,6 +16,7 @@ struct Args {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    /// Config related command
     Config {
         #[command(subcommand)]
         commands: configc::ConfigCommands,

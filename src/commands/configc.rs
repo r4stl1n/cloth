@@ -5,10 +5,10 @@ use std::fs;
 
 #[derive(Subcommand, Debug)]
 pub enum ConfigCommands {
-    // List all supported patterns
+    /// Output the config file
     View {},
 
-    // View a specific pattern
+    // Setup the config file
     Setup {},
 }
 

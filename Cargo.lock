@@ -140,7 +140,6 @@ dependencies = [
  "eyre",
  "http",
  "serde",
- "serde_derive",
  "serde_json",
  "tracing",
  "tracing-subscriber",

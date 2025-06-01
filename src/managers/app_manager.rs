@@ -1,4 +1,5 @@
 use crate::integrations::openwebui::openwebui_service::OpenWebUIService;
+use crate::utils::config::Config;
 use crate::utils::text_extraction::get_input_or_stdin;
 use eyre::Result;
 use std::collections::HashMap;
@@ -13,11 +14,19 @@ pub struct AppManager {
 
 impl AppManager {
     pub fn new(patterns_directory: &str) -> Result<AppManager> {
+        let config_struct = Config::load_configuration_struct();
+
+        tracing::info!("owui base url: {}", config_struct.owui_base_url);
+        tracing::info!("owui auth token len: {}", config_struct.owui_auth_token.len());
+
         let mut app_manager = AppManager {
             patterns: HashMap::new(),
             patterns_dir: patterns_directory.to_string(),
 
-            owui_client: OpenWebUIService::new(),
+            owui_client: OpenWebUIService::new(
+                config_struct.owui_base_url.as_str(),
+                config_struct.owui_auth_token.as_str(),
+            ),
         };
 
         app_manager.load_patterns()?;

@@ -1,8 +1,6 @@
 use crate::integrations::openwebui::openwebui_structs::{ChatCompletionResponse, ModelsResponse};
-use crate::utils::env_utils::get_env_or_default;
 use eyre::{eyre, Result};
 use http::Response;
-use tracing::error;
 use ureq::Body;
 
 pub struct OpenWebUIService {
@@ -11,17 +9,11 @@ pub struct OpenWebUIService {
 }
 
 impl OpenWebUIService {
-    pub fn new() -> OpenWebUIService {
-        // Get the base_url
-        let base_url = get_env_or_default("OWUI_BASE_URL", "http://localhost:3000");
-        let auth_token = get_env_or_default("OWUI_AUTH_TOKEN", "");
-
-        tracing::info!("OWUI_BASE_URL base url: {}", base_url);
-        tracing::info!("OWUI_AUTH_TOKEN auth token len: {}", auth_token.len());
+    pub fn new(base_url: &str, auth_token: &str) -> OpenWebUIService {
 
         OpenWebUIService {
-            base_url,
-            auth_token,
+            base_url: base_url.to_string(),
+            auth_token: auth_token.to_string(),
         }
     }
 

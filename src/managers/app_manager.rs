@@ -1,6 +1,7 @@
+use crate::consts::prompts::PATTERN_OUTPUT_FORMAT_PROMPT;
 use crate::integrations::openwebui::openwebui_service::OpenWebUIService;
 use crate::utils::config::Config;
-use crate::utils::text_extraction::get_input_or_stdin;
+use crate::utils::text_extraction::{extract_text, get_input_or_stdin};
 use eyre::Result;
 use std::collections::HashMap;
 use std::fs;
@@ -109,11 +110,23 @@ impl AppManager {
 
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
 
-        let completion =
-            self.owui_client
-                .completion(&model, pattern_data.as_str(), input.as_str())?;
+        let completion = self.owui_client.completion(
+            &model,
+            format!(
+                "{}\n{}",
+                pattern_data.as_str(),
+                PATTERN_OUTPUT_FORMAT_PROMPT
+            )
+            .as_str(),
+            input.as_str(),
+        )?;
 
-        Ok(completion)
+        let Ok(extracted_text) = extract_text(completion.as_str(), "<--OUTPUT-->", "<!!OUTPUT!!>")
+        else {
+            return Err(eyre::eyre!("failed to extract output from completion"));
+        };
+
+        Ok(extracted_text)
     }
 
     pub fn process_raw(
@@ -127,10 +140,17 @@ impl AppManager {
 
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
 
-        let completion = self
-            .owui_client
-            .completion(&model, prompt, input.as_str())?;
+        let completion = self.owui_client.completion(
+            &model,
+            format!("{}\n{}", prompt, PATTERN_OUTPUT_FORMAT_PROMPT).as_str(),
+            input.as_str(),
+        )?;
 
-        Ok(completion)
+        let Ok(extracted_text) = extract_text(completion.as_str(), "<--OUTPUT-->", "<!!OUTPUT!!>")
+        else {
+            return Err(eyre::eyre!("failed to extract output from completion"));
+        };
+
+        Ok(extracted_text)
     }
 }

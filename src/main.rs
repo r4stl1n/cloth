@@ -2,6 +2,7 @@ mod commands;
 mod integrations;
 mod managers;
 mod utils;
+mod consts;
 
 use crate::commands::pattern;
 use crate::commands::{configc, openwebui};

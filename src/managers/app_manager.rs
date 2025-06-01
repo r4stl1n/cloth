@@ -16,8 +16,8 @@ impl AppManager {
     pub fn new(patterns_directory: &str) -> Result<AppManager> {
         let config_struct = Config::load_configuration_struct();
 
-        tracing::info!("owui base url: {}", config_struct.owui_base_url);
-        tracing::info!("owui auth token len: {}", config_struct.owui_auth_token.len());
+        tracing::debug!("owui base url: {}", config_struct.owui_base_url);
+        tracing::debug!("owui auth token len: {}", config_struct.owui_auth_token.len());
 
         let mut app_manager = AppManager {
             patterns: HashMap::new(),
@@ -51,7 +51,7 @@ impl AppManager {
             }
         }
 
-        tracing::info!("loaded {} patterns", self.patterns.len());
+        tracing::debug!("loaded {} patterns", self.patterns.len());
 
         Ok(())
     }
@@ -67,14 +67,14 @@ impl AppManager {
 
     pub fn list_patterns(&mut self) {
         for (pattern_name, pattern_path) in &self.patterns {
-            tracing::info!("pattern: {} -> {}", pattern_name, pattern_path);
+            tracing::debug!("pattern: {} -> {}", pattern_name, pattern_path);
         }
     }
 
     pub fn view_pattern(&mut self, pattern_name: &str) {
         match self.read_pattern(pattern_name) {
             Ok(content) => {
-                tracing::info!("Pattern '{}'\n\n{}", pattern_name, content);
+                tracing::debug!("Pattern '{}'\n\n{}", pattern_name, content);
             }
             Err(e) => tracing::error!("Failed to read pattern: {}", e),
         }

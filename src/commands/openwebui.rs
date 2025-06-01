@@ -27,9 +27,9 @@ pub fn execute(args: &OpenWebUiCommands) {
     let mut owui_client = OpenWebUIService::new(config_struct.owui_base_url.as_str(),
                                                 config_struct.owui_auth_token.as_str());
 
-    tracing::info!("owui base url: {}", config_struct.owui_base_url);
-    tracing::info!("owui auth token len: {}", config_struct.owui_auth_token.len());
-    
+    tracing::debug!("owui base url: {}", config_struct.owui_base_url);
+    tracing::debug!("owui auth token len: {}", config_struct.owui_auth_token.len());
+
     match args {
         OpenWebUiCommands::ListModels {} => match owui_client.print_models() {
             Ok(()) => {}
@@ -41,7 +41,7 @@ pub fn execute(args: &OpenWebUiCommands) {
 
             match owui_client.complete(model, input.as_str()) {
                 Ok(data) => {
-                    tracing::info!("completion: {}", data)
+                    tracing::debug!("completion: {}", data)
                 }
                 Err(e) => {
                     tracing::error!("failed to get completion: {e}")

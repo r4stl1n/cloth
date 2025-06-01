@@ -17,7 +17,7 @@ impl Config {
 
         match config {
             Ok(cfg) => {
-                tracing::info!("config file loaded");
+                tracing::debug!("config file loaded");
                 Config {
                     owui_base_url: cfg.owui_base_url,
                     owui_auth_token: cfg.owui_auth_token,

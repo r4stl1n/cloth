@@ -45,12 +45,12 @@ impl OpenWebUIService {
     }
 
     pub fn print_models(&mut self) -> Result<()> {
-        tracing::info!("requesting available models");
+        tracing::debug!("requesting available models");
 
         let models = self.get_models()?;
 
         for model in models.data {
-            tracing::info!("name: {}", model.name);
+            tracing::debug!("name: {}", model.name);
         }
 
         Ok(())

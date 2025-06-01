@@ -30,8 +30,8 @@ impl Config {
             Err(_) => {
                 tracing::warn!("config file not found, loading from env");
                 Config {
-                    patterns_dir: get_env_or_default("CLOTH_PATTERNS_DIR", "./patterns/"),
-                    model_name: get_env_or_default("CLOTH_MODEL_NAME", "gpt-4o"),
+                    patterns_dir: get_env_or_default("NEXUS_PATTERNS_DIR", "./patterns/"),
+                    model_name: get_env_or_default("NEXUS_MODEL_NAME", "gpt-4o"),
                     owui_base_url: get_env_or_default("OWUI_BASE_URL", "http://localhost:3000"),
                     owui_auth_token: get_env_or_default("OWUI_AUTH_TOKEN", ""),
                 }
@@ -39,7 +39,7 @@ impl Config {
         }
     }
 
-    /// Load configuration from ~/.config/cloth/config.json
+    /// Load configuration from ~/.config/nexus/config.json
     fn load() -> Result<Self> {
         let config_path =
             Self::get_config_path().context("Failed to determine config file path")?;
@@ -60,11 +60,11 @@ impl Config {
         Ok(config)
     }
 
-    /// Get the path to the config file (~/.config/cloth/config.json)
+    /// Get the path to the config file (~/.config/nexus/config.json)
     pub fn get_config_path() -> Result<PathBuf> {
         let home_dir =
             dirs::home_dir().ok_or_else(|| eyre::eyre!("Could not determine home directory"))?;
 
-        Ok(home_dir.join(".config").join("cloth").join("config.json"))
+        Ok(home_dir.join(".config").join("nexus").join("config.json"))
     }
 }

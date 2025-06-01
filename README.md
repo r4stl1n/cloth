@@ -1,10 +1,10 @@
-# Cloth CLI
+# Nexus CLI
 
 A command-line interface tool built in Rust for processing LLM patterns through the OpenWebUI API.
 
 ## Overview
 
-Cloth CLI provides a streamlined way to interact with Large Language Models using predefined patterns. It integrates seamlessly with OpenWebUI to process text through various AI models with structured prompts.
+Nexus CLI provides a streamlined way to interact with Large Language Models using predefined patterns. It integrates seamlessly with OpenWebUI to process text through various AI models with structured prompts.
 
 ## Features
 
@@ -24,10 +24,10 @@ Cloth CLI provides a streamlined way to interact with Large Language Models usin
 ### Build from Source
 
 ```bash
-git clone https://github.com/r4stl1n/cloth
-cd cloth
+git clone https://github.com/r4stl1n/nexus
+cd nexus
 cargo build --release
-##The compiled binary will be available at `target/release/cloth`.
+##The compiled binary will be available at `target/release/nexus`.
 ```
 To install do the following
 ``` bash
@@ -36,15 +36,15 @@ cargo install --path ./
 ## Quick Start
 1. **Setup Configuration**
 ``` bash
-   cloth config setup
+   nexus config setup
 ```
 1. **List Available Models**
 ``` bash
-   cloth owui list-models
+   nexus owui list-models
 ```
 1. **Process Text with a Pattern**
 ``` bash
-   cloth pattern process --name extract_wisdom --model your-model --query "Your text here"
+   nexus pattern process --name extract_wisdom --model your-model --query "Your text here"
 ```
 
 ## Usage Examples
@@ -52,65 +52,65 @@ cargo install --path ./
 ### Basic Pattern Processing
 ```bash
 # Process text using a pattern
-cloth pattern process --name summarize --model model-name --query "Text to summarize"
+nexus pattern process --name summarize --model model-name --query "Text to summarize"
 ```
 ### Using with System Clipboard (macOS)
 ``` bash
 # Process clipboard content with a pattern
-pbpaste | cloth pattern process --name extract_wisdom
+pbpaste | nexus pattern process --name extract_wisdom
 
 # Extract wisdom from clipboard content
-pbpaste | cloth pattern process --name extract_wisdom --model your-model
+pbpaste | nexus pattern process --name extract_wisdom --model your-model
 ```
-### Chaining Cloth Commands
+### Chaining Nexus Commands
 ``` bash
 # Chain patterns: first summarize, then create a one-sentence summary
-cat test.md | cloth pattern process --name summarize | cloth pattern raw --prompt "Return a one sentence summary of the text provided."
+cat test.md | nexus pattern process --name summarize | nexus pattern raw --prompt "Return a one sentence summary of the text provided."
 
 # Process file through multiple stages
-cat document.txt | cloth pattern process --name humanize | cloth pattern process --name summarize
+cat document.txt | nexus pattern process --name humanize | nexus pattern process --name summarize
 
 # Extract wisdom and then summarize the results
-pbpaste | cloth pattern process --name extract_wisdom | cloth pattern raw --prompt "Create a bullet-point list of the key insights"
+pbpaste | nexus pattern process --name extract_wisdom | nexus pattern raw --prompt "Create a bullet-point list of the key insights"
 ```
 ### Pipeline Processing
 ``` bash
 # Complex pipeline: clipboard → extract wisdom → summarize → final formatting
-pbpaste | cloth pattern process --name extract_wisdom --model gpt-4 | cloth pattern process --name summarize --model gpt-3.5 | cloth pattern raw --prompt "Format this as a tweet-length summary"
+pbpaste | nexus pattern process --name extract_wisdom --model gpt-4 | nexus pattern process --name summarize --model gpt-3.5 | nexus pattern raw --prompt "Format this as a tweet-length summary"
 
 # File processing pipeline
-cat research_paper.txt | cloth pattern process --name extract_wisdom | cloth pattern raw --prompt "Convert these insights into actionable recommendations"
+cat research_paper.txt | nexus pattern process --name extract_wisdom | nexus pattern raw --prompt "Convert these insights into actionable recommendations"
 ```
 
 ### Working with Models
 ``` bash
 # List all available models
-cloth owui list-models
+nexus owui list-models
 
 # Send a direct completion request
-cloth owui completion --model model-name --query "Your prompt"
+nexus owui completion --model model-name --query "Your prompt"
 ```
 ### Pattern Operations
 ``` bash
 # List all available patterns
-cloth pattern list
+nexus pattern list
 
 # View a specific pattern
-cloth pattern view --pattern extract_wisdom
+nexus pattern view --pattern extract_wisdom
 
 # Process text using a pattern
-cloth pattern process --name summarize --model model-name --query "Text to summarize"
+nexus pattern process --name summarize --model model-name --query "Text to summarize"
 
 # Process with custom pattern directory
-cloth pattern --pattern-directory /path/to/patterns list
+nexus pattern --pattern-directory /path/to/patterns list
 ```
 ### Raw Query Processing
 ``` bash
 # Process a raw prompt
-cloth pattern raw --model model-name --prompt "Your custom prompt" --query "Input text"
+nexus pattern raw --model model-name --prompt "Your custom prompt" --query "Input text"
 ```
 ## Pattern System
-Cloth uses a directory-based pattern system. Each pattern is defined in a separate folder containing a `pattern.md` file.
+Nexus uses a directory-based pattern system. Each pattern is defined in a separate folder containing a `pattern.md` file.
 ### Default Pattern Structure
 ``` 
 patterns/
@@ -124,28 +124,28 @@ patterns/
 ### Creating Custom Patterns
 1. Create a new directory in your patterns folder
 2. Add a `pattern.md` file with your prompt template
-3. Use the pattern with `cloth pattern process --name your-pattern-name`
+3. Use the pattern with `nexus pattern process --name your-pattern-name`
 
 ## Command Reference
-Click to expand full command reference### `cloth`
+Click to expand full command reference### `nexus`
 Main application entry point.
-**Usage:** `cloth <COMMAND>`
+**Usage:** `nexus <COMMAND>`
 **Subcommands:**
 - `config` — Configuration management
 - `owui` — OpenWebUI operations
 - `pattern` — Pattern operations
 
-### `cloth config`
+### `nexus config`
 **Subcommands:**
 - `view` — Display current configuration
 - `setup` — Initialize configuration
 
-### `cloth owui`
+### `nexus owui`
 **Subcommands:**
 - `list-models` — List available models
 - `completion`  — Send completion request
 
-### `cloth pattern`
+### `nexus pattern`
 **Options:**
 - `--pattern-directory <PATH>` — Custom pattern directory
 
@@ -173,14 +173,14 @@ src/
 ## Troubleshooting
 ### Common Issues
 - **Connection errors**: Verify your OpenWebUI instance is running and accessible
-- **Model not found**: Use `cloth owui list-models` to see available models
+- **Model not found**: Use `nexus owui list-models` to see available models
 - **Pattern not found**: Check pattern directory path and file structure
 - **Permission errors**: Ensure the binary has execution permissions
 
 ### Logging
 Enable detailed logging for debugging:
 ``` bash
-RUST_LOG=debug cloth pattern list
+RUST_LOG=debug nexus pattern list
 ```
 ## Contributing
 1. Fork the repository

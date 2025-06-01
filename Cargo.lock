@@ -132,21 +132,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f46ad14479a25103f283c0f10005961cf086d8dc42205bb44c46ac563475dca6"
 
 [[package]]
-name = "cloth"
-version = "0.1.0"
-dependencies = [
- "clap",
- "dirs",
- "eyre",
- "http",
- "serde",
- "serde_json",
- "tracing",
- "tracing-subscriber",
- "ureq",
-]
-
-[[package]]
 name = "colorchoice"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -518,6 +503,21 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3be647b768db090acb35d5ec5db2b0e1f1de11133ca123b9eacf5137868f892a"
 dependencies = [
  "adler2",
+]
+
+[[package]]
+name = "nexus"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "dirs",
+ "eyre",
+ "http",
+ "serde",
+ "serde_json",
+ "tracing",
+ "tracing-subscriber",
+ "ureq",
 ]
 
 [[package]]

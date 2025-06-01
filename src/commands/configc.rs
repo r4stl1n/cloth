@@ -53,17 +53,22 @@ pub fn execute(args: &ConfigCommands) {
                 config_path.to_string_lossy().to_string()
             );
 
-            let Ok(base_url) = get_user_input("OpenWebUI URL > ") else {
+            let Ok(base_url) = get_user_input("OpenWebUI URL> ") else {
                 tracing::error!("failed to read user input");
                 return;
             };
 
-            let Ok(auth_token) = get_user_input("OpenWebUI Auth Token > ") else {
+            let Ok(auth_token) = get_user_input("OpenWebUI Auth Token> ") else {
                 tracing::error!("failed to read user input");
                 return;
             };
 
-            let Ok(model) = get_user_input("Model > ") else {
+            let Ok(model) = get_user_input("Model> ") else {
+                tracing::error!("failed to read user input");
+                return;
+            };
+
+            let Ok(patterns_dir) = get_user_input("Patterns Dir> ") else {
                 tracing::error!("failed to read user input");
                 return;
             };
@@ -82,6 +87,7 @@ pub fn execute(args: &ConfigCommands) {
             }
 
             let config_data = Config {
+                patterns_dir,
                 model_name: model,
                 owui_base_url: base_url,
                 owui_auth_token: auth_token,

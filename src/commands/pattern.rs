@@ -46,9 +46,8 @@ pub enum PatternCommands {
 }
 
 pub fn execute(pattern_directory: Option<String>, args: &PatternCommands) {
-    let pattern_dir = pattern_directory.unwrap_or_else(|| String::from("./patterns"));
 
-    let mut app_manager = match AppManager::new(pattern_dir.as_str()) {
+    let mut app_manager = match AppManager::new(pattern_directory) {
         Ok(app) => app,
         Err(e) => {
             tracing::error!("failed to start app_manager: {e}");

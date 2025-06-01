@@ -7,6 +7,7 @@ use std::path::PathBuf;
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Config {
     pub model_name: String,
+    pub patterns_dir: String,
     pub owui_base_url: String,
     pub owui_auth_token: String,
 }
@@ -20,6 +21,7 @@ impl Config {
             Ok(cfg) => {
                 tracing::debug!("config file loaded");
                 Config {
+                    patterns_dir: cfg.patterns_dir,
                     model_name: cfg.model_name,
                     owui_base_url: cfg.owui_base_url,
                     owui_auth_token: cfg.owui_auth_token,
@@ -28,7 +30,8 @@ impl Config {
             Err(_) => {
                 tracing::warn!("config file not found, loading from env");
                 Config {
-                    model_name: String::new(),
+                    patterns_dir: get_env_or_default("CLOTH_PATTERNS_DIR", "./patterns/"),
+                    model_name: get_env_or_default("CLOTH_MODEL_NAME", "gpt-4o"),
                     owui_base_url: get_env_or_default("OWUI_BASE_URL", "http://localhost:3000"),
                     owui_auth_token: get_env_or_default("OWUI_AUTH_TOKEN", ""),
                 }

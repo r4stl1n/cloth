@@ -14,9 +14,20 @@ pub struct AppManager {
 }
 
 impl AppManager {
-    pub fn new(patterns_directory: &str) -> Result<AppManager> {
+    pub fn new(pattern_directory: Option<String>) -> Result<AppManager> {
         let config_struct = Config::load_configuration_struct();
 
+        let patterns_directory = pattern_directory
+            .or_else(|| {
+                if !config_struct.patterns_dir.is_empty() {
+                    Some(config_struct.patterns_dir.clone())
+                } else {
+                    None
+                }
+            })
+            .unwrap_or_else(|| String::from("./patterns"));
+
+        tracing::debug!("patterns dir: {}", config_struct.patterns_dir);
         tracing::debug!("owui base url: {}", config_struct.owui_base_url);
         tracing::debug!(
             "owui auth token len: {}",
@@ -26,7 +37,7 @@ impl AppManager {
         let mut app_manager = AppManager {
             config: config_struct.clone(),
             patterns: HashMap::new(),
-            patterns_dir: patterns_directory.to_string(),
+            patterns_dir: patterns_directory,
             owui_client: OpenWebUIService::new(
                 config_struct.owui_base_url.as_str(),
                 config_struct.owui_auth_token.as_str(),
@@ -98,9 +109,9 @@ impl AppManager {
 
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
 
-        let completion = self
-            .owui_client
-            .completion(&model,  pattern_data.as_str(), input.as_str())?;
+        let completion =
+            self.owui_client
+                .completion(&model, pattern_data.as_str(), input.as_str())?;
 
         Ok(completion)
     }

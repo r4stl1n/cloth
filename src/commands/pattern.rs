@@ -16,10 +16,9 @@ pub enum PatternCommands {
 
     // Process a pattern
     Process {
-
         /// Name of the model
         #[clap(long)]
-        model: String,
+        model: Option<String>,
 
         /// Name of the pattern
         #[clap(long)]
@@ -48,7 +47,7 @@ pub fn execute(pattern_directory: Option<String>, args: &PatternCommands) {
         PatternCommands::View { pattern } => app_manager.view_pattern(pattern.as_str()),
 
         PatternCommands::Process { model, name, query } => {
-            match app_manager.process_pattern(model, name, query.clone()) {
+            match app_manager.process_pattern(model.clone(), name, query.clone()) {
                 Ok(data) => {
                     println!("{}", data)
                 }

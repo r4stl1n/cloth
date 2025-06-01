@@ -6,9 +6,10 @@ use std::collections::HashMap;
 use std::fs;
 
 pub struct AppManager {
+    config: Config,
     patterns: HashMap<String, String>,
     patterns_dir: String,
-
+    
     owui_client: OpenWebUIService,
 }
 
@@ -17,12 +18,15 @@ impl AppManager {
         let config_struct = Config::load_configuration_struct();
 
         tracing::debug!("owui base url: {}", config_struct.owui_base_url);
-        tracing::debug!("owui auth token len: {}", config_struct.owui_auth_token.len());
+        tracing::debug!(
+            "owui auth token len: {}",
+            config_struct.owui_auth_token.len()
+        );
 
         let mut app_manager = AppManager {
+            config: config_struct.clone(),
             patterns: HashMap::new(),
             patterns_dir: patterns_directory.to_string(),
-
             owui_client: OpenWebUIService::new(
                 config_struct.owui_base_url.as_str(),
                 config_struct.owui_auth_token.as_str(),
@@ -82,19 +86,22 @@ impl AppManager {
 
     pub fn process_pattern(
         &mut self,
-        model_name: &str,
+        model_name: Option<String>,
         pattern_name: &str,
         query: Option<String>,
     ) -> Result<String> {
+
         // Attempt to load the pattern
         let pattern_data = self.read_pattern(pattern_name)?;
 
         // Get the input for the query
         let input = get_input_or_stdin(query.to_owned());
 
+        let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
+
         let completion = self
             .owui_client
-            .complete(model_name, format!("{}\n{}", pattern_data, input).as_str())?;
+            .completion(&model, format!("{}\n{}", pattern_data, input).as_str())?;
 
         Ok(completion)
     }

@@ -4,8 +4,9 @@ use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::PathBuf;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Config {
+    pub model_name: String,
     pub owui_base_url: String,
     pub owui_auth_token: String,
 }
@@ -19,6 +20,7 @@ impl Config {
             Ok(cfg) => {
                 tracing::debug!("config file loaded");
                 Config {
+                    model_name: cfg.model_name,
                     owui_base_url: cfg.owui_base_url,
                     owui_auth_token: cfg.owui_auth_token,
                 }
@@ -26,6 +28,7 @@ impl Config {
             Err(_) => {
                 tracing::warn!("config file not found, loading from env");
                 Config {
+                    model_name: String::new(),
                     owui_base_url: get_env_or_default("OWUI_BASE_URL", "http://localhost:3000"),
                     owui_auth_token: get_env_or_default("OWUI_AUTH_TOKEN", ""),
                 }
@@ -55,7 +58,7 @@ impl Config {
     }
 
     /// Get the path to the config file (~/.config/cloth/config.json)
-    fn get_config_path() -> Result<PathBuf> {
+    pub fn get_config_path() -> Result<PathBuf> {
         let home_dir =
             dirs::home_dir().ok_or_else(|| eyre::eyre!("Could not determine home directory"))?;
 

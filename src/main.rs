@@ -3,8 +3,8 @@ mod integrations;
 mod managers;
 mod utils;
 
-use crate::commands::openwebui;
 use crate::commands::pattern;
+use crate::commands::{configc, openwebui};
 use clap::{Parser, Subcommand};
 
 #[derive(Parser, Debug)]
@@ -16,6 +16,11 @@ struct Args {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
+    Config {
+        #[command(subcommand)]
+        commands: configc::ConfigCommands,
+    },
+
     /// OpenWebUi related commands
     OWUI {
         #[command(subcommand)]
@@ -42,8 +47,8 @@ fn main() {
     let args = Args::parse();
 
     match &args.cmd {
+        Commands::Config { commands } => configc::execute(commands),
         Commands::OWUI { commands } => openwebui::execute(commands),
-
         Commands::Pattern {
             pattern_directory,
             commands,

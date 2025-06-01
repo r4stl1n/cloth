@@ -10,7 +10,6 @@ pub struct OpenWebUIService {
 
 impl OpenWebUIService {
     pub fn new(base_url: &str, auth_token: &str) -> OpenWebUIService {
-
         OpenWebUIService {
             base_url: base_url.to_string(),
             auth_token: auth_token.to_string(),
@@ -56,7 +55,7 @@ impl OpenWebUIService {
         Ok(())
     }
 
-    pub fn complete(&mut self, model: &str, query: &str) -> Result<String> {
+    pub fn completion(&mut self, model: &str, query: &str) -> Result<String> {
         let request_data = serde_json::json!({
             "model": model,
             "messages": [

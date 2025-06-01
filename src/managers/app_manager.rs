@@ -1,3 +1,4 @@
+use crate::integrations::openwebui::openwebui_service::OpenWebUIService;
 use crate::utils::text_extraction::get_input_or_stdin;
 use eyre::Result;
 use std::collections::HashMap;
@@ -6,6 +7,8 @@ use std::fs;
 pub struct AppManager {
     patterns: HashMap<String, String>,
     patterns_dir: String,
+
+    owui_client: OpenWebUIService,
 }
 
 impl AppManager {
@@ -13,6 +16,8 @@ impl AppManager {
         let mut app_manager = AppManager {
             patterns: HashMap::new(),
             patterns_dir: patterns_directory.to_string(),
+
+            owui_client: OpenWebUIService::new(),
         };
 
         app_manager.load_patterns()?;
@@ -66,7 +71,22 @@ impl AppManager {
         }
     }
 
-    pub fn process_pattern(&mut self, pattern_name: &str, query: Option<String>) {
+    pub fn process_pattern(
+        &mut self,
+        model_name: &str,
+        pattern_name: &str,
+        query: Option<String>,
+    ) -> Result<String> {
+        // Attempt to load the pattern
+        let pattern_data = self.read_pattern(pattern_name)?;
+
+        // Get the input for the query
         let input = get_input_or_stdin(query.to_owned());
+
+        let completion = self
+            .owui_client
+            .complete(model_name, format!("{}\n{}", pattern_data, input).as_str())?;
+
+        Ok(completion)
     }
 }

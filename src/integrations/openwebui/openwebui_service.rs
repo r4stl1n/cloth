@@ -55,10 +55,14 @@ impl OpenWebUIService {
         Ok(())
     }
 
-    pub fn completion(&mut self, model: &str, query: &str) -> Result<String> {
+    pub fn completion(&mut self, model: &str, system: &str, query: &str) -> Result<String> {
         let request_data = serde_json::json!({
             "model": model,
             "messages": [
+                {
+                    "role": "system",
+                    "content": system
+                },
                 {
                     "role": "user",
                     "content": query

@@ -100,7 +100,7 @@ impl AppManager {
 
         let completion = self
             .owui_client
-            .completion(&model, format!("{}\n{}", pattern_data, input).as_str())?;
+            .completion(&model,  pattern_data.as_str(), input.as_str())?;
 
         Ok(completion)
     }
@@ -115,10 +115,10 @@ impl AppManager {
         let input = get_input_or_stdin(query.to_owned());
 
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
-        
+
         let completion = self
             .owui_client
-            .completion(&model, format!("{}\n{}", prompt, input).as_str())?;
+            .completion(&model, prompt, input.as_str())?;
 
         Ok(completion)
     }

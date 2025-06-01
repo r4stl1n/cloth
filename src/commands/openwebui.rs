@@ -43,7 +43,7 @@ pub fn execute(args: &OpenWebUiCommands) {
         OpenWebUiCommands::Completion { model, query } => {
             let input = get_input_or_stdin(query.to_owned());
 
-            match owui_client.completion(model, input.as_str()) {
+            match owui_client.completion(model, "you are a helpful ai", input.as_str()) {
                 Ok(data) => {
                     tracing::debug!("completion: {}", data)
                 }

@@ -27,4 +27,4 @@ serde_derive = { version = "1.0.219"}
 serde_json = { version = "1.0.140"}
 tracing = { version = "0.1.41" }
 tracing-subscriber = { version = "0.3.19" }
-ureq = { version = "3.0.11", features = ["json", "charset"]}
+ureq = { version = "3.0.11", features = ["json", "charset", "platform-verifier"]}

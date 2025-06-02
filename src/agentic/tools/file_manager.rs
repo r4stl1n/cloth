@@ -22,6 +22,13 @@ impl Tool for FileManagerTool {
     }
 
     fn run(&self, data: &str) -> Result<String> {
+        // Ensure output directory exists
+        let output_dir = Path::new("output");
+        if !output_dir.exists() {
+            fs::create_dir(output_dir)
+                .map_err(|e| eyre!("Failed to create output directory: {}", e))?;
+        }
+
         let args: Vec<&str> = data.split_whitespace().collect();
 
         if args.is_empty() {
@@ -36,6 +43,7 @@ impl Tool for FileManagerTool {
                     return Err(eyre!("Usage: fm create <filename> <content>"));
                 }
                 let filename = args[1];
+                let filepath = output_dir.join(filename);
 
                 // Everything after the filename is the content
                 let content_start_idx = data.find(filename).unwrap() + filename.len() + 1;
@@ -45,35 +53,40 @@ impl Tool for FileManagerTool {
                     "" // Empty content if nothing follows the filename
                 };
 
-                fs::write(filename, content)
+                fs::write(filepath, content)
                     .map_err(|e| eyre!("Failed to create file: {}", e))?;
 
-                Ok(format!("File '{}' created successfully", filename))
-            },
+                Ok(format!("File '{}' created successfully in output directory", filename))
+            }
             "delete" => {
                 if args.len() < 2 {
                     return Err(eyre!("Usage: fm delete <filename>"));
                 }
                 let filename = args[1];
+                let filepath = output_dir.join(filename);
 
-                if !Path::new(filename).exists() {
-                    return Err(eyre!("File '{}' does not exist", filename));
+                if !filepath.exists() {
+                    return Err(eyre!("File '{}' does not exist in output directory", filename));
                 }
 
-                fs::remove_file(filename)
+                fs::remove_file(filepath)
                     .map_err(|e| eyre!("Failed to delete file: {}", e))?;
 
-                Ok(format!("File '{}' deleted successfully", filename))
-            },
+                Ok(format!("File '{}' deleted successfully from output directory", filename))
+            }
             "list" => {
-                let dir = if args.len() > 1 { args[1] } else { "." };
+                let dir = if args.len() > 1 {
+                    output_dir.join(args[1])
+                } else {
+                    output_dir.to_path_buf()
+                };
 
-                if !Path::new(dir).exists() {
-                    return Err(eyre!("Directory '{}' does not exist", dir));
+                if !dir.exists() {
+                    return Err(eyre!("Directory '{}' does not exist", dir.display()));
                 }
 
                 let mut result = String::new();
-                result.push_str(&format!("fm in '{}':\n", dir));
+                result.push_str(&format!("fm in '{}':\n", dir.display()));
 
                 let entries = fs::read_dir(dir)
                     .map_err(|e| eyre!("Failed to read directory: {}", e))?;
@@ -88,22 +101,23 @@ impl Tool for FileManagerTool {
                 }
 
                 Ok(result)
-            },
+            }
             "read" => {
                 if args.len() < 2 {
                     return Err(eyre!("Usage: fm read <filename>"));
                 }
                 let filename = args[1];
+                let filepath = output_dir.join(filename);
 
-                if !Path::new(filename).exists() {
-                    return Err(eyre!("File '{}' does not exist", filename));
+                if !filepath.exists() {
+                    return Err(eyre!("File '{}' does not exist in output directory", filename));
                 }
 
-                let content = fs::read_to_string(filename)
+                let content = fs::read_to_string(filepath)
                     .map_err(|e| eyre!("Failed to read file: {}", e))?;
 
                 Ok(format!("Contents of '{}':\n{}", filename, content))
-            },
+            }
             _ => Err(eyre!("Unknown command: {}. Available commands: create, delete, list, read", command))
         }
     }

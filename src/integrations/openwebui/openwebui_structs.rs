@@ -89,19 +89,28 @@ pub struct Message {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Usage {
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "response_token/s")]
-    pub response_tokens_per_second: f64,
+    pub response_tokens_per_second: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "prompt_token/s")]
-    pub prompt_tokens_per_second: f64,
-    pub total_duration: i64,
-    pub load_duration: i64,
-    pub prompt_eval_count: i32,
+    pub prompt_tokens_per_second: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_duration: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_duration: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_eval_count: Option<i32>,
     pub prompt_tokens: i32,
-    pub prompt_eval_duration: i64,
-    pub eval_count: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prompt_eval_duration: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eval_count: Option<i32>,
     pub completion_tokens: i32,
-    pub eval_duration: i64,
-    pub approximate_total: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub eval_duration: Option<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approximate_total: Option<String>,
     pub total_tokens: i32,
     pub completion_tokens_details: CompletionTokensDetails,
 }

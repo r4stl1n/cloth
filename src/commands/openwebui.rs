@@ -45,7 +45,7 @@ pub fn execute(args: &OpenWebUiCommands) {
 
             match owui_client.completion(model, "you are a helpful ai", input.as_str()) {
                 Ok(data) => {
-                    tracing::debug!("completion: {}", data)
+                    tracing::info!("completion: {}", data)
                 }
                 Err(e) => {
                     tracing::error!("failed to get completion: {e}")

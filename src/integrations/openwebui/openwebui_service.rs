@@ -1,23 +1,36 @@
 use crate::integrations::openwebui::openwebui_structs::{ChatCompletionResponse, ModelsResponse};
 use eyre::{eyre, Result};
 use http::Response;
-use ureq::Body;
+use ureq::{Agent, Body};
+use ureq::tls::{RootCerts, TlsConfig};
 
 pub struct OpenWebUIService {
     base_url: String,
     auth_token: String,
+    ureq_client: Agent,
 }
 
 impl OpenWebUIService {
     pub fn new(base_url: &str, auth_token: &str) -> OpenWebUIService {
+        
+        let agent = Agent::config_builder()
+            .tls_config(
+                TlsConfig::builder()
+                    .root_certs(RootCerts::PlatformVerifier)
+                    .build()
+            )
+            .build()
+            .new_agent();
+        
         OpenWebUIService {
+            ureq_client: agent,
             base_url: base_url.to_string(),
             auth_token: auth_token.to_string(),
         }
     }
 
-    fn send_get_request(&self, url: &str) -> Result<Response<Body>> {
-        let recv_body = ureq::get(url)
+    fn send_get_request(&mut self, url: &str) -> Result<Response<Body>> {
+        let recv_body = self.ureq_client.clone().get(url)
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer ".to_string() + &self.auth_token)
             .call()?;
@@ -30,7 +43,7 @@ impl OpenWebUIService {
         url: &str,
         data: impl serde::ser::Serialize,
     ) -> Result<Response<Body>> {
-        let recv_body = ureq::post(url)
+        let recv_body = self.ureq_client.clone().post(url)
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer ".to_string() + &self.auth_token)
             .send_json(data)?;

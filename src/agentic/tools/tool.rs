@@ -9,6 +9,6 @@ pub trait Tool {
 
 impl dyn Tool {
     pub fn get_tool_prompt(&self) -> String {
-        format!("{}\n{}\n{}\n ", self.name(), self.description(), self.example())
+        format!("Tool-Name: {}\nTool-Description: {}\nTool-Example: {}\n", self.name(), self.description(), self.example())
     }
 }

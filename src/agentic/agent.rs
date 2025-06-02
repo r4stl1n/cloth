@@ -52,14 +52,7 @@ impl Agent {
 
         let tool_info = tools
             .iter()
-            .map(|tool| {
-                format!(
-                    "Tool-Name: {}\nTool-Description: {}\nTool-Example: {}\n",
-                    tool.name(),
-                    tool.description(),
-                    tool.example()
-                )
-            })
+            .map(|tool| tool.get_tool_prompt())
             .collect::<Vec<_>>()
             .join("\n");
 

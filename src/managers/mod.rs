@@ -1,2 +1,2 @@
 pub mod app_manager;
-mod agentic_manager;
+pub mod agentic_manager;

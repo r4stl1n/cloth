@@ -108,6 +108,10 @@ impl AppManager {
         // Get the input for the query
         let input = get_input_or_stdin(query.to_owned());
 
+        if input.is_empty() {
+            return Err(eyre::eyre!("input is empty"));
+        }
+        
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
 
         let completion = self.owui_client.completion(
@@ -135,8 +139,13 @@ impl AppManager {
         prompt: &str,
         query: Option<String>,
     ) -> Result<String> {
+
         // Get the input for the query
         let input = get_input_or_stdin(query.to_owned());
+
+        if input.is_empty() {
+            return Err(eyre::eyre!("input is empty"));
+        }
 
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
 

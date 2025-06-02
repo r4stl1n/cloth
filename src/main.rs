@@ -1,11 +1,11 @@
+mod agentic;
 mod commands;
+mod consts;
 mod integrations;
 mod managers;
 mod utils;
-mod consts;
-mod agentic;
 
-use crate::commands::pattern;
+use crate::commands::{agenticc, pattern};
 use crate::commands::{configc, openwebui};
 use clap::{Parser, Subcommand};
 
@@ -18,19 +18,29 @@ struct Args {
 
 #[derive(Subcommand, Debug)]
 enum Commands {
-    /// Config related command
+    /// Agentic functionality
+    Agentic {
+        /// Team Directory
+        #[arg(long, global = true)]
+        teams_directory: Option<String>,
+
+        #[command(subcommand)]
+        commands: agenticc::AgenticCommands,
+    },
+
+    /// Config management
     Config {
         #[command(subcommand)]
         commands: configc::ConfigCommands,
     },
 
-    /// OpenWebUi related commands
+    /// OpenWebUi functions
     OWUI {
         #[command(subcommand)]
         commands: openwebui::OpenWebUiCommands,
     },
 
-    /// Pattern-related commands
+    /// Pattern interactions
     Pattern {
         #[arg(long, global = true)]
         pattern_directory: Option<String>,
@@ -50,6 +60,10 @@ fn main() {
     let args = Args::parse();
 
     match &args.cmd {
+        Commands::Agentic {
+            teams_directory,
+            commands,
+        } => agenticc::execute(teams_directory.clone(), commands),
         Commands::Config { commands } => configc::execute(commands),
         Commands::OWUI { commands } => openwebui::execute(commands),
         Commands::Pattern {

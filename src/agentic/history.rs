@@ -38,26 +38,7 @@ impl History {
         output
     }
 
-    pub fn print_latest_history(&self) -> String {
-        let mut output = String::new();
-
-        if let Some(message) = self.context.last() {
-            output.push_str(&format!(
-                "Role: {}\nContent: {}\n\n",
-                message.role, message.content
-            ));
-        }
-
-        output
-    }
-
     pub fn add(&mut self, message: Message) {
         self.context.push(message);
-    }
-
-    pub fn remove_latest(&mut self) {
-        if !self.context.is_empty() {
-            self.context.pop();
-        }
     }
 }

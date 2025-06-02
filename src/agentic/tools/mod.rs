@@ -1,3 +1,3 @@
 pub mod tool;
-mod calculator;
-mod file_manager;
+pub mod calculator;
+pub mod file_manager;

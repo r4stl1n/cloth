@@ -73,6 +73,11 @@ pub fn execute(args: &ConfigCommands) {
                 return;
             };
 
+            let Ok(team_dir) = get_user_input("Team Dir> ") else {
+                tracing::error!("failed to read user input");
+                return;
+            };
+            
             if let Some(parent) = config_path.parent() {
                 match fs::create_dir_all(parent) {
                     Ok(()) => {}
@@ -88,6 +93,7 @@ pub fn execute(args: &ConfigCommands) {
 
             let config_data = Config {
                 patterns_dir,
+                team_directory: team_dir,
                 model_name: model,
                 owui_base_url: base_url,
                 owui_auth_token: auth_token,

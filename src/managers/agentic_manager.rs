@@ -162,6 +162,7 @@ impl AgenticManager {
         });
 
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
+        let mut previous_report = String::new();
 
         // Iterate 100 times trying to solve the task
         for _ in 0..100 {
@@ -172,7 +173,7 @@ impl AgenticManager {
 
             let completion =
                 self.owui_client
-                    .completion(&model, "", agent.context.print_history().as_str())?;
+                    .completion(&model, format!("# Relevant Data:\n{}\n", previous_report).as_str(), agent.context.print_history().as_str())?;
 
             // Check if our completion failed if it did we retry
             let Ok(rbop_completion) = AgenticResponse::from_completion(completion.as_str()) else {
@@ -244,6 +245,8 @@ impl AgenticManager {
                         role: "user".to_string(),
                         content: format!("Result: {}", rbop_completion.data),
                     });
+
+                    previous_report = format!("{}\n{}",previous_report,rbop_completion.data.clone());
 
                     current_agent = self.manager_role.clone();
                 }

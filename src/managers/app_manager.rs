@@ -125,6 +125,8 @@ impl AppManager {
             input.as_str(),
         )?;
 
+        tracing::debug!("completion: {}", completion);
+
         let Ok(extracted_text) = extract_text(completion.as_str(), "<--OUTPUT-->", "<!!OUTPUT!!>")
         else {
             return Err(eyre::eyre!("failed to extract output from completion"));
@@ -154,6 +156,8 @@ impl AppManager {
             format!("\n{}\n{}\n# Input\n", prompt, PATTERN_OUTPUT_FORMAT_PROMPT).as_str(),
             input.as_str(),
         )?;
+
+        tracing::debug!("completion: {}", completion);
 
         let Ok(extracted_text) = extract_text(completion.as_str(), "<--OUTPUT-->", "<!!OUTPUT!!>")
         else {

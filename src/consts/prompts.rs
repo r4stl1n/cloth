@@ -17,6 +17,9 @@ To perform an action, use the following:
 <--DATA2-->data to pass to the tool<!!DATA2!!>
 <!!PAUSE!!>
 
+Note: if using the tool action only the tool name should go in the data field all parameters and additional arguments
+to use the tool should go in the data2 field.
+
 To write your answer, use the following:
 <--THOUGHT-->Describe your current thoughts about the task you are given<!!THOUGHT!!>
 <--ACTION-->report<!!ACTION!!>

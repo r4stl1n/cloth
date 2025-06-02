@@ -1,23 +1,24 @@
-use crate::utils::text_extraction::extract_text;
 use eyre::Result;
 use serde_derive::Deserialize;
 
+use crate::utils::text_extraction::extract_text;
+
 #[derive(Default, Deserialize, Debug)]
-pub struct RBOPResponse {
+pub struct AgenticResponse {
     pub thought: String,
     pub action: String,
     pub data: String,
     pub data2: String,
 }
 
-impl RBOPResponse {
-    pub fn from_completion(completion: &str) -> Result<RBOPResponse> {
+impl AgenticResponse {
+    pub fn from_completion(completion: &str) -> Result<AgenticResponse> {
         let thought = extract_text(completion, "<--THOUGHT-->", "<!!THOUGHT!!>")?;
         let action = extract_text(completion, "<--ACTION-->", "<!!ACTION!!>")?;
         let data = extract_text(completion, "<--DATA-->", "<!!DATA!!>")?;
         let data2 = extract_text(completion, "<--DATA2-->", "<!!DATA2!!>").unwrap_or(String::new());
 
-        Ok(RBOPResponse {
+        Ok(AgenticResponse {
             thought,
             action,
             data,

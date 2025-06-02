@@ -1,5 +1,6 @@
 pub const PATTERN_OUTPUT_FORMAT_PROMPT: &str = r#"
-Return the your output in the following format:
+# Output Format
+Ensure you return all the output in the following format using the OUTPUT tags.
 <--OUTPUT-->INSERT OUTPUT HERE<!!OUTPUT!!>
 "#;
 

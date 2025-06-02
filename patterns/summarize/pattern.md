@@ -25,5 +25,3 @@ Analyze the provided content and extract key insights into three specific sectio
 - Use proper Markdown formatting throughout
 - Ensure no duplicate content across sections
 - Maintain distinct opening words for each list item
-
-# INPUT:

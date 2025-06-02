@@ -111,19 +111,21 @@ impl AppManager {
         if input.is_empty() {
             return Err(eyre::eyre!("input is empty"));
         }
-        
+
         let model = model_name.unwrap_or_else(|| self.config.model_name.clone());
 
         let completion = self.owui_client.completion(
             &model,
             format!(
-                "{}\n{}",
+                "\n{}\n{}\n# Input\n",
                 pattern_data.as_str(),
                 PATTERN_OUTPUT_FORMAT_PROMPT
             )
             .as_str(),
             input.as_str(),
         )?;
+
+        tracing::debug!("completion: {}", completion);
 
         let Ok(extracted_text) = extract_text(completion.as_str(), "<--OUTPUT-->", "<!!OUTPUT!!>")
         else {
@@ -151,9 +153,11 @@ impl AppManager {
 
         let completion = self.owui_client.completion(
             &model,
-            format!("{}\n{}", prompt, PATTERN_OUTPUT_FORMAT_PROMPT).as_str(),
+            format!("\n{}\n{}\n# Input\n", prompt, PATTERN_OUTPUT_FORMAT_PROMPT).as_str(),
             input.as_str(),
         )?;
+
+        tracing::debug!("completion: {}", completion);
 
         let Ok(extracted_text) = extract_text(completion.as_str(), "<--OUTPUT-->", "<!!OUTPUT!!>")
         else {

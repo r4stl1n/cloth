@@ -9,8 +9,10 @@ pub struct ModelsResponse {
 pub struct Model {
     pub id: String,
     pub name: String,
-    pub object: String,
-    pub created: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub object: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<i64>,
     pub owned_by: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ollama: Option<Ollama>,
@@ -55,7 +57,8 @@ pub struct Info {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Meta {
     pub profile_image_url: String,
-    pub description: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub model_ids: Option<serde_json::Value>,
 }

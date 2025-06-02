@@ -46,8 +46,3 @@ Rewrite content to sound like it was written by a real person—clear, simple, a
 **AI Style**: "The system operates efficiently and effectively under all conditions without any issues."
 
 **Human Style**: "The system works well, though it might need tweaks under some conditions."
-
-# OUTPUT FORMAT
-Deliver the rewritten text as coherent, flowing paragraphs without bullet points or artificial breaks.
-
-# INPUT:

@@ -177,7 +177,7 @@ impl AgenticManager {
             // Check if our completion failed if it did we retry
             let Ok(rbop_completion) = AgenticResponse::from_completion(completion.as_str()) else {
                 agent.context.add(Message {
-                    role: "assistant".to_string(),
+                    role: "user".to_string(),
                     content: agent.construct_invalid_format_prompt()?,
                 });
                 continue;
@@ -227,7 +227,7 @@ impl AgenticManager {
                     );
 
                     agent.context.add(Message {
-                        role: "assistant".to_string(),
+                        role: "user".to_string(),
                         content: format!("Result: {}", tool_response),
                     });
                 }
@@ -254,6 +254,8 @@ impl AgenticManager {
                 _ => {
                     tracing::error!("Invalid action selected: {}", rbop_completion.action);
                     tracing::warn!("Retrying");
+
+                    agent.context.remove_latest();
                     continue;
                 }
             }

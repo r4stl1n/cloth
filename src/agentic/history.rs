@@ -41,4 +41,7 @@ impl History {
     pub fn add(&mut self, message: Message) {
         self.context.push(message);
     }
+    pub fn remove_latest(&mut self) {
+        self.context.pop();
+    }
 }

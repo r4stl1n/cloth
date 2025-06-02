@@ -1,5 +1,6 @@
 use eyre::{eyre, Result};
 use std::fs;
+use std::io::Write;
 use std::path::Path;
 use crate::agentic::tools::tool::Tool;
 
@@ -137,7 +138,11 @@ impl Tool for FileManagerTool {
                     "" // Empty content if nothing follows the filename
                 };
 
-                fs::write(filepath, content)
+                fs::OpenOptions::new()
+                    .append(true)
+                    .open(filepath)
+                    .map_err(|e| eyre!("Failed to open file: {}", e))?
+                    .write_all(content.as_bytes())
                     .map_err(|e| eyre!("Failed to write to file: {}", e))?;
 
                 Ok(format!("Successfully wrote to file '{}'", filename))

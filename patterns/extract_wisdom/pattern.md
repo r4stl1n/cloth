@@ -26,5 +26,3 @@ Extract valuable insights from content focusing on human potential, technology, 
 - Bullet points, not numbers
 - No repetition or duplicate opening words
 - No commentary—only requested sections
-
-# INPUT:

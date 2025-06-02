@@ -14,7 +14,7 @@ impl Tool for FileManagerTool {
         "fm create example.txt This is the content of my file\n\
          fm delete example.text\n\
          fm read example.txt\n\
-         fm list directory".to_string()
+         fm list".to_string()
     }
 
     fn description(&self) -> String {

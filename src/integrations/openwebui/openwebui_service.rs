@@ -12,7 +12,7 @@ pub struct OpenWebUIService {
 
 impl OpenWebUIService {
     pub fn new(base_url: &str, auth_token: &str) -> OpenWebUIService {
-        
+
         let agent = Agent::config_builder()
             .tls_config(
                 TlsConfig::builder()
@@ -21,7 +21,7 @@ impl OpenWebUIService {
             )
             .build()
             .new_agent();
-        
+
         OpenWebUIService {
             ureq_client: agent,
             base_url: base_url.to_string(),
@@ -57,12 +57,12 @@ impl OpenWebUIService {
     }
 
     pub fn print_models(&mut self) -> Result<()> {
-        tracing::debug!("requesting available models");
+        tracing::info!("requesting available models");
 
         let models = self.get_models()?;
 
         for model in models.data {
-            tracing::debug!("name: {}", model.name);
+            tracing::info!("name: {}", model.name);
         }
 
         Ok(())

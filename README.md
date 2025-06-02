@@ -9,6 +9,7 @@ Nexus CLI provides a streamlined way to interact with Large Language Models usin
 ## Features
 
 - 🎯 **Pattern-based Processing**: Use predefined patterns 
+- 🤖 **Agentic Workflows**: Deploy intelligent agent teams for complex tasks
 - 🔌 **OpenWebUI Integration**: Direct integration with OpenWebUI API
 - ⚙️ **Flexible Configuration**: Easy setup and configuration management
 - 🚀 **Raw Query Support**: Process custom prompts alongside patterns
@@ -54,6 +55,19 @@ cargo install --path ./
 # Process text using a pattern
 nexus pattern process --name summarize --model model-name --query "Text to summarize"
 ```
+
+### Agentic Team Processing
+``` bash
+# Run a security analysis task
+nexus agentic process --team security --task "Review the authentication system for potential vulnerabilities in architecture.md"
+
+# Development team task
+nexus agentic process --team development --task "Design a scalable microservices architecture design and write to design.md"
+
+# Generic problem-solving task
+nexus agentic process --team generic --task "Write a short blog post about microservices"
+```
+
 ### Using with System Clipboard (macOS)
 ``` bash
 # Process clipboard content with a pattern

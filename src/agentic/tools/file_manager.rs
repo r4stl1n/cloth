@@ -14,11 +14,12 @@ impl Tool for FileManagerTool {
         "fm create example.txt This is the content of my file\n\
          fm delete example.text\n\
          fm read example.txt\n\
+         fm write example.txt New content\n\
          fm list".to_string()
     }
 
     fn description(&self) -> String {
-        "Manages fm: create, delete, list, read".to_string()
+        "Manages fm: create, delete, list, read, write".to_string()
     }
 
     fn run(&self, data: &str) -> Result<String> {
@@ -32,7 +33,7 @@ impl Tool for FileManagerTool {
         let args: Vec<&str> = data.split_whitespace().collect();
 
         if args.is_empty() {
-            return Err(eyre!("No command provided. Available commands: create, delete, list, read"));
+            return Err(eyre!("No command provided. Available commands: create, delete, list, read, write"));
         }
 
         let command = args[0];
@@ -118,7 +119,30 @@ impl Tool for FileManagerTool {
 
                 Ok(format!("Contents of '{}':\n{}", filename, content))
             }
-            _ => Err(eyre!("Unknown command: {}. Available commands: create, delete, list, read", command))
+            "write" => {
+                if args.len() < 3 {
+                    return Err(eyre!("Usage: fm write <filename> <content>"));
+                }
+                let filename = args[1];
+                let filepath = output_dir.join(filename);
+
+                if !filepath.exists() {
+                    return Err(eyre!("File '{}' does not exist in output directory", filename));
+                }
+
+                let content_start_idx = data.find(filename).unwrap() + filename.len() + 1;
+                let content = if content_start_idx < data.len() {
+                    &data[content_start_idx..]
+                } else {
+                    "" // Empty content if nothing follows the filename
+                };
+
+                fs::write(filepath, content)
+                    .map_err(|e| eyre!("Failed to write to file: {}", e))?;
+
+                Ok(format!("Successfully wrote to file '{}'", filename))
+            }
+            _ => Err(eyre!("Unknown command: {}. Available commands: create, delete, list, read, write", command))
         }
     }
 }
